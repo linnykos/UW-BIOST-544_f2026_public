@@ -57,7 +57,11 @@ sum(w_mat) / 2
 
 # Ten biopsies sent for expert review ------------------------------------------
 
-set.seed(544)
-idx_labeled <- c(sample(which(y_vec == 0), 5),
-                 sample(which(y_vec == 1), 5))
+# The lab sends the clear-cut cases: the 5 biopsies with the lowest total of
+# the 9 scores and the 5 with the highest. Ties in the total are broken by row
+# number, since order() keeps tied rows in their original order.
+total_vec <- rowSums(x_mat)
+order_vec <- order(total_vec)
+idx_labeled <- c(utils::head(order_vec, 5),
+                 utils::tail(order_vec, 5))
 y_vec[idx_labeled]
